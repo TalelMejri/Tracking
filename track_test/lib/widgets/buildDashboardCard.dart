@@ -5,16 +5,13 @@ class BuildDashboardCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String value;
-  final String subtitle;
 
   const BuildDashboardCard({
     super.key,
     required this.color,
     required this.icon,
     required this.title,
-    required this.value,
-    required this.subtitle,
-  });
+    required this.value  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +44,7 @@ class BuildDashboardCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              subtitle,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white70,
-              ),
-            ),
+           
           ],
         ),
       ),

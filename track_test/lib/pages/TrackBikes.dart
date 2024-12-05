@@ -28,6 +28,9 @@ class _TrackBikeState extends State<TrackBike> {
   Timer? _markerUpdateTimer;
   double lat = 0.0;
   double long = 0.0;
+  double? bikeSpeed;
+  LocationData? previousLocation;
+  DateTime? previousTime;
 
   final String orsApiKey =
       '5b3ce3597851110001cf6248ed49d5d5d50b47c886fa2a8261919d5d';
@@ -42,12 +45,14 @@ class _TrackBikeState extends State<TrackBike> {
         setState(() {
           widget.bike.longitude = bikemodel.longitude;
           widget.bike.latitude = bikemodel.latitude;
+
           if (currentLocation != null) {
             double calculatedDistance = distance.as(
               LengthUnit.Kilometer,
               LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
               LatLng(widget.bike.latitude, widget.bike.longitude),
             );
+
             if (calculatedDistance > maxDistance) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -72,6 +77,28 @@ class _TrackBikeState extends State<TrackBike> {
                 ),
               );
             }
+
+            if (previousLocation != null && previousTime != null) {
+              final distanceTravelled = distance.as(
+                LengthUnit.Kilometer,
+                LatLng(
+                    previousLocation!.latitude!, previousLocation!.longitude!),
+                LatLng(widget.bike.latitude, widget.bike.longitude),
+              );
+
+              final durationInSeconds =
+                  DateTime.now().difference(previousTime!).inSeconds;
+
+              if (durationInSeconds > 0) {
+                bikeSpeed = (distanceTravelled / (durationInSeconds / 3600));
+              }
+            }
+
+            previousLocation = LocationData.fromMap({
+              "latitude": widget.bike.latitude,
+              "longitude": widget.bike.longitude,
+            });
+            previousTime = DateTime.now();
           }
         });
       }
@@ -217,6 +244,34 @@ class _TrackBikeState extends State<TrackBike> {
                       ],
                     ),
                   ],
+                ),
+                Positioned(
+                  bottom: 100,
+                  left: 10,
+                  right: 10,
+                  child: Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 5.0,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Vitesse actuelle : ${bikeSpeed?.toStringAsFixed(2) ?? 'N/A'} km/h',
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 if (totalDistance != null && totalDuration != null)
                   Positioned(

@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                       Expanded(
                         child: SingleChildScrollView(
                           child: SizedBox(
-                            height: 300,
+                            height: 400,
                             child: GridView.builder(
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
@@ -149,18 +149,19 @@ class _HomePageState extends State<HomePage> {
                                   menu.bikesReserved,
                                   menu.bikesNotReserved
                                 ];
-                                final subtitles = ["BikeGo", "BikeGo"];
                                 return BuildDashboardCard(
                                   color: cardColors[index],
                                   icon: icons[index],
                                   title: titles[index],
                                   value: values[index].toString(),
-                                  subtitle: subtitles[index],
                                 );
                               },
                             ),
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        height: 5,
                       ),
                       Center(
                         child: ElevatedButton.icon(

@@ -5,7 +5,7 @@ import 'package:track_test/model/UserModel.dart';
 
 class AuthService {
   bool isAuth = false;
-  String url = "http://10.0.2.2:8000/api"; // emulator
+  String url = "https://bike-go.workaround.services/api"; // emulator
   String errorRegister = "";
   String errorLogin = "";
   String token = "";

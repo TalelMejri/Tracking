@@ -187,20 +187,19 @@ class _AddBikeState extends State<AddBike> {
                               const SizedBox(height: 20),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  primary:
-                                      Colors.blue, // Button color (primary)
-                                  onPrimary: Colors.white, // Text color
+                                  primary: Colors.blue,
+                                  onPrimary: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 12),
-                                  elevation: 5, // Shadow effect
+                                  elevation: 5,
                                 ),
                                 onPressed: loading
-                                    ? null // Disable button if loading
+                                    ? null
                                     : () {
-                                        _submit(); // Call your submit method
+                                        _submit();
                                       },
                                 child: loading
                                     ? const CircularProgressIndicator(
