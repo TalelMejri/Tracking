@@ -36,15 +36,26 @@ class _TrackBikeState extends State<TrackBike> {
       '5b3ce3597851110001cf6248ed49d5d5d50b47c886fa2a8261919d5d';
   final BikeSrvice _bikeService = BikeSrvice();
 
+  Future<String> updatebIkes(int id,double lat,double long) async {
+          String result = await _bikeService.updateBike(id, lat, long);
+      return result;
+  }
+  
   void _startMarkerUpdateTimer() {
     final Distance distance = Distance();
     _markerUpdateTimer =
-        Timer.periodic(const Duration(seconds: 3), (timer) async {
+        Timer.periodic(const Duration(seconds: 2), (timer) async {
       final bikemodel = await _bikeService.getBikeById(widget.bike.id);
+
       if (bikemodel != null) {
         setState(() {
-          widget.bike.longitude = bikemodel.longitude;
-          widget.bike.latitude = bikemodel.latitude;
+          widget.bike.longitude = bikemodel.longitude+0.00002;
+          widget.bike.latitude = bikemodel.latitude+0.00002;
+          long=widget.bike.longitude;
+          lat=widget.bike.latitude;
+          updatebIkes(widget.bike.id,widget.bike.latitude,widget.bike.longitude);
+          _getCurrentLocation();
+          // _getRoute(LatLng(widget.bike.longitude+0.002, widget.bike.latitude+0.002));
 
           if (currentLocation != null) {
             double calculatedDistance = distance.as(
@@ -95,35 +106,14 @@ class _TrackBikeState extends State<TrackBike> {
             }
 
             previousLocation = LocationData.fromMap({
-              "latitude": widget.bike.latitude,
-              "longitude": widget.bike.longitude,
+              "latitude": widget.bike.latitude ,
+              "longitude": widget.bike.longitude ,
             });
             previousTime = DateTime.now();
           }
         });
       }
     });
-  }
-
-  void _updateRedMarkerPosition() {
-    if (currentLocation != null) {
-      setState(() {
-        final LatLng lastPosition = markers.last.point;
-        final newLatLng = LatLng(
-            lastPosition.latitude - 0.001, lastPosition.longitude - 0.001);
-        markers.removeLast();
-        markers.add(
-          Marker(
-            width: 80.0,
-            height: 80.0,
-            point: newLatLng,
-            child: const Icon(Icons.pedal_bike_sharp,
-                color: Colors.red, size: 40.0),
-          ),
-        );
-        _getRoute(newLatLng);
-      });
-    }
   }
 
   @override
@@ -143,6 +133,7 @@ class _TrackBikeState extends State<TrackBike> {
       var userLocation = await location.getLocation();
       setState(() {
         currentLocation = userLocation;
+        markers.clear();
         markers.add(
           Marker(
             width: 80.0,

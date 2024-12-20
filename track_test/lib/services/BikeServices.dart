@@ -86,6 +86,33 @@ class BikeSrvice {
     }
   }
 
+  Future<String> updateBike(int id, double latitude, double longitude) async {
+    try {
+      final Map<String, dynamic> requestBody = {
+        'latitude': latitude,
+        'longitude': longitude,
+      };
+
+      final response = await http.put(
+        Uri.parse('$BASE_URL_BACKEND/update/$id'),
+        body: jsonEncode(requestBody),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 201) {
+        return jsonDecode(response.body)['data']; // "Update Success"
+      } else if (response.statusCode == 404) {
+        return jsonDecode(response.body)['data']; // "Not Found"
+      } else {
+        return "Error: ${response.statusCode}";
+      }
+    } catch (e) {
+      return "Error: $e";
+    }
+  }
+
   Future<bool> AddBike(String id, String name, double lat, double long) async {
     try {
       await authService.getUserFromStorage();
