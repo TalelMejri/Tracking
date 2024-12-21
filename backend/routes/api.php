@@ -25,7 +25,7 @@ Route::get('/getBikes/{id}', [BikeController::class, 'getBikes']);
 Route::get('/getrobots/{id}', [RobotController::class, 'getRobots']);
 
 Route::put('/update/{id}', [BikeController::class, 'UpdateBikes']);
-Route::put('/update/{id}', [RobotController::class, 'UpdateRobot']);
+Route::put('/UpdateRobot/{id}', [RobotController::class, 'UpdateRobot']);
 
 Route::get('/getBikeById/{id}', [BikeController::class, 'getBikeById']);
 Route::get('/getRobotById/{id}', [RobotController::class, 'getRobotById']);
